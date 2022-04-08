@@ -5,7 +5,7 @@ resource "aws_security_group" "my_public_app3_sg" {
 
   #INBOUND CONNECTIONS 
   ingress {
-    description = "allow ssh into the EC2"
+    description = "allow ssh into the ubuntu server"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -13,7 +13,7 @@ resource "aws_security_group" "my_public_app3_sg" {
   }
 
   ingress {
-    description = "Allow HTTP into the EC2"
+    description = "Allow HTTP into the ubuntu server"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
