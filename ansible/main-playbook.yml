@@ -25,24 +25,39 @@
       with_items: 
         - "/etc/nginx/sites-enabled/default"
         - "/etc/nginx/sites-available/default"
+      notify:
+       - Restart nginx
 
     - name: add webpage to servers
       copy: 
-        src: "files/index.html"
+        src: "templates/index.html.tpl"
         dest: "/var/www/{{ website_name }}/index.html"
+      notify:
+       - Restart nginx  
 
     - name: configure nginx with new config file
       template: 
         src: "templates/default.tpl" # don't need to specify the location ansible will be able to read folders
         dest: "/etc/nginx/sites-available/{{ website_name }}"
+      notify:
+       - Restart nginx
 
     - name: Create symlink for config file
       file: 
         src: "/etc/nginx/sites-available/{{ website_name }}"
         dest: "/etc/nginx/sites-enabled/{{ website_name }}"
         state: link
+      notify:
+       - Restart nginx
 
-    - name: Restart nginx 
+
+    - name: Ensure nginx is running
+      service:
+        name: nginx
+        state: started
+
+  handlers:
+    - name: restart nginx 
       service:
         name: nginx
         state: restarted
